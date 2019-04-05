@@ -19,7 +19,7 @@ public class ReplBot: ChatBot {
         var message: String? = nil
         repeat {
             if let message = message {
-                receive(message: message)
+                process(message: message)
             }
             
             print("\(name)> ", terminator: "")
@@ -42,13 +42,13 @@ public class ReplBot: ChatBot {
         return rules.count != oldRules.count
     }
     
-    public func receive(message: String) {
-        for response in process(message: message) {
+    public func process(message: String) {
+        for response in responsesFor(message: message) {
             print(response)
         }
     }
     
-    func process(message: String) -> [ChatResponse] {
+    func responsesFor(message: String) -> [ChatResponse] {
         return rules.compactMap { $0.1.response(for: message) }
     }
 }

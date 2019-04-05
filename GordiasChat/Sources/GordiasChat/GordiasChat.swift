@@ -20,8 +20,13 @@ public protocol ChatBot {
     var name: String { get }
 
     func listen()
+    /**
+     * Processes a single received message. Exposed publicly so that it
+     * can be accessed programmatically if needed. Should be used internally
+     * for handling messages as well for conformance.
+     */
+    func process(message: String)
     
     func listen(for: ChatMessageProcessor, id: String?)
     func unlisten(id: String) -> Bool
-    func receive(message: String)
 }
