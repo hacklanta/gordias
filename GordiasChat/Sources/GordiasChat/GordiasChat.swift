@@ -17,7 +17,8 @@ public protocol ChatResponse {
 }
 
 public protocol ChatBot {
-    func initialize(botName: String)
+    var name: String { get }
+
     func listen()
     
     func listen(for: ChatMessageProcessor, id: String?)

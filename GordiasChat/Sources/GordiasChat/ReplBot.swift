@@ -6,17 +6,15 @@
 import Foundation
 
 public class ReplBot: ChatBot {
-    private var botName: String = ""
+    public let name: String
+    
     // Definitely room for optimization here, since removing is going to be a pain, but that's for the future. For small enough rulesets this should be trivial.
     private var rules: [(String?, ChatMessageProcessor)] = []
     
-    public init() {}
-    
-    public func initialize(botName: String) {
-        print("Hello, my name is \(botName)!")
-        self.botName = botName
+    public init(named _botName: String) {
+        self.name = _botName
     }
-    
+
     public func listen() {
         var message: String? = nil
         repeat {
@@ -24,7 +22,7 @@ public class ReplBot: ChatBot {
                 receive(message: message)
             }
             
-            print("\(botName)> ", terminator: "")
+            print("\(name)> ", terminator: "")
             message = readLine(strippingNewline: true)
         } while message != nil && message != "exit"
 
