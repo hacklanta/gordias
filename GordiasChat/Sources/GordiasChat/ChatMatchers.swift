@@ -26,14 +26,3 @@ final class FuncMatcher: ChatMatcher {
 func matcher(_matcherFunc: @escaping (String)->Bool) -> ChatMatcher {
     return FuncMatcher(matcher: _matcherFunc)
 }
-
-// FIXME Move this into ChatProcessors.swift once XCode 10.2 and Swift 5 roll around.
-extension ChatBot {
-    public func listen(for _matcher: ChatMatcher, responding _responseFunc: @escaping (String) -> ChatResponse, id: String? = nil) {
-        listen(for: ChatMatcherResponse(matcher: _matcher, responseFunc: _responseFunc), id: id)
-    }
-    
-    public func listen(forPattern _pattern: String, responding _responseFunc: @escaping (String) -> ChatResponse, id: String? = nil) throws {
-        listen(for: try NSRegularExpression(pattern: _pattern, options: []), responding: _responseFunc, id: id)
-    }
-}
