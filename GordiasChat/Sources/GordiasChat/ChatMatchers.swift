@@ -6,23 +6,27 @@
 import Foundation
 
 extension NSRegularExpression: ChatMatcher {
-    public func doesMatch(message: String) -> Bool {
-        return self.firstMatch(in: message, options: [], range: NSMakeRange(0, message.count)) != nil
+    public typealias MatchType = NSTextCheckingResult
+
+    public func matches(message: String) -> [NSTextCheckingResult] {
+        return self.matches(in: message, options: [], range: NSMakeRange(0, message.count))
     }
 }
 
-final class FuncMatcher: ChatMatcher {
-    let matcherFunc: (String)->Bool
+final class FuncMatcher<FuncMatchType>: ChatMatcher {
+    public typealias MatchType = FuncMatchType
+
+    let matcherFunc: (String)->[MatchType]
     
-    init(matcher: @escaping (String)->Bool) {
+    init(matcher: @escaping (String)->[MatchType]) {
         self.matcherFunc = matcher
     }
     
-    func doesMatch(message: String) -> Bool {
+    func matches(message: String) -> [MatchType] {
         return matcherFunc(message)
     }
 }
 
-func matcher(_matcherFunc: @escaping (String)->Bool) -> ChatMatcher {
-    return FuncMatcher(matcher: _matcherFunc)
+func matcher<FuncMatchType, MatcherType: ChatMatcher>(_matcherFunc: @escaping (String)->[FuncMatchType]) -> MatcherType where MatcherType.MatchType == FuncMatchType {
+    return FuncMatcher<FuncMatchType>(matcher: _matcherFunc) as! MatcherType
 }

@@ -5,7 +5,9 @@
 import Foundation
 
 public protocol ChatMatcher {
-    func doesMatch(message: String) -> Bool
+    associatedtype MatchType
+
+    func matches(message: String) -> [MatchType]
 }
 
 public protocol ChatMessageProcessor {

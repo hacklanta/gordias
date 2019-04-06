@@ -13,7 +13,7 @@ do {
     let adapter = parsed.get(adapterArgument) ?? AdapterArgument.repl
     let bot = adapter.bot(named: "Heimdall")
 
-    try bot.listen(forPattern: "^Hello", responding: { (message) in "Ohai!" })
+    try bot.listen(forPattern: "^help", responding: { _, _ in "Ohai!" })
 
     bot.listen()
 } catch let ape as ArgumentParserError {
