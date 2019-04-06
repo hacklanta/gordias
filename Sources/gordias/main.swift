@@ -13,7 +13,17 @@ do {
     let adapter = parsed.get(adapterArgument) ?? AdapterArgument.repl
     let bot = adapter.bot(named: "Heimdall")
 
-    try bot.listen(forPattern: "^help", responding: { _, _ in "Ohai!" })
+    try bot.listen(forPattern: "^help *(?<filter>.*)?", responding: { matches, message in
+        // More than one match shouldn't happen, nor should 0.
+        guard matches.count == 1 else { return nil }
+
+        if let filterRange = Range(matches[0].range(withName: "filter"),
+                                   in: message), !filterRange.isEmpty {
+            return "Help filtered by [\(message[filterRange])]"
+        } else {
+            return "Full help!"
+        }
+    })
 
     bot.listen()
 } catch let ape as ArgumentParserError {
