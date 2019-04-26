@@ -7,6 +7,12 @@ import Foundation
 
 public class ReplBot: ChatBot {
     public let name: String
+
+    public var processors: [ChatMessageProcessor] {
+        get {
+            return rules.map { $0.1 }
+        }
+    }
     
     // Definitely room for optimization here, since removing is going to be a pain, but that's for the future. For small enough rulesets this should be trivial.
     private var rules: [(String?, ChatMessageProcessor)] = []

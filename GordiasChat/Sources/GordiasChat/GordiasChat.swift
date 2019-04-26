@@ -40,6 +40,7 @@ public protocol ChatResponse {
  */
 public protocol ChatBot {
     var name: String { get }
+    var processors: [ChatMessageProcessor] { get }
 
     /**
      * Starts synchronously listening to the bot's underlying chat transport.
