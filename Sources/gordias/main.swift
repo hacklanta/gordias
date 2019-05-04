@@ -11,7 +11,7 @@ let adapterArgument = parser.add(option: "--adapter", shortName: "-a", kind: Ada
 do {
     let parsed = try parser.parse(arguments)
     let adapter = parsed.get(adapterArgument) ?? AdapterArgument.repl
-    let bot = adapter.bot(named: "Heimdall")
+    let bot = adapter.bot(named: "Gordias")
 
     try addHelp(forBot: bot)
 
