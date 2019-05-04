@@ -80,6 +80,8 @@ public protocol ChatBot {
 /// Conforming to this protocol qualifies a type to be added to a `ReplBot` as a
 /// listener using `listen(for:id:)`.
 public protocol ChatMessageProcessor {
+    var help: String { get }
+
     func response(for _message: String) -> ChatResponse?
 }
 

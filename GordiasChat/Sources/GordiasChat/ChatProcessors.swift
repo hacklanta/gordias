@@ -18,12 +18,17 @@ import Foundation
  * function).
  */
 class ChatMatcherProcessor<ProcessorMatchType, MatcherType: ChatMatcher>: ChatMessageProcessor where MatcherType.MatchType == ProcessorMatchType {
+    public let help: String
+
     let matcher: MatcherType
     let responseFunc: ([MatcherType.MatchType], String) -> ChatResponse?
-    
-    init(matcher: MatcherType, responseFunc: @escaping ([MatcherType.MatchType], String) -> ChatResponse?) {
+
+    init(matcher: MatcherType,
+         responseFunc: @escaping ([MatcherType.MatchType], String) -> ChatResponse?,
+         help: String) {
         self.matcher = matcher
         self.responseFunc = responseFunc
+        self.help = help
     }
     
     func response(for _message: String) -> ChatResponse? {
@@ -39,14 +44,16 @@ class ChatMatcherProcessor<ProcessorMatchType, MatcherType: ChatMatcher>: ChatMe
 extension ChatBot {
     public func listen<FuncMatchType, MatcherType: ChatMatcher>(for _matcher: MatcherType,
                                                    responding _responseFunc: @escaping ([FuncMatchType], String) -> ChatResponse?,
+                                                   help: String,
                                                    id: String? = nil)
     where MatcherType.MatchType == FuncMatchType {
-        listen(for: ChatMatcherProcessor(matcher: _matcher, responseFunc: _responseFunc), id: id)
+        listen(for: ChatMatcherProcessor(matcher: _matcher, responseFunc: _responseFunc, help: help), id: id)
     }
     
     public func listen(forPattern _pattern: String,
                        responding _responseFunc: @escaping ([NSTextCheckingResult], String) -> ChatResponse?,
+                       help: String,
                        id: String? = nil) throws {
-        listen(for: try NSRegularExpression(pattern: _pattern, options: []), responding: _responseFunc, id: id)
+        listen(for: try NSRegularExpression(pattern: _pattern, options: []), responding: _responseFunc, help: help, id: id)
     }
 }

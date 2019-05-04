@@ -32,6 +32,8 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		179F0F292273F3F8007DDE91 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179F0F282273F3F8007DDE91 /* help.swift */; };
+		179F0F2C2273F5DF007DDE91 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179F0F282273F3F8007DDE91 /* help.swift */; };
 		OBJ_137 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Await.swift */; };
 		OBJ_138 /* ByteString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* ByteString.swift */; };
 		OBJ_139 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* CStringArray.swift */; };
@@ -300,9 +302,24 @@
 			remoteGlobalIDString = "SwiftPM::clibc";
 			remoteInfo = clibc;
 		};
+		179F0F2A2273F3F9007DDE91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Gordias::GordiasTests";
+			remoteInfo = GordiasTests;
+		};
+		179F0F2B2273F3F9007DDE91 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = OBJ_1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = "Gordias::Gordias";
+			remoteInfo = Gordias;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		179F0F282273F3F8007DDE91 /* help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = help.swift; path = Sources/gordias/help.swift; sourceTree = SOURCE_ROOT; };
 		"Gordias::Gordias::Product" /* Gordias */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = Gordias; sourceTree = BUILT_PRODUCTS_DIR; };
 		"Gordias::GordiasTests::Product" /* GordiasTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GordiasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"GordiasChat::GordiasChat::Product" /* GordiasChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GordiasChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -696,7 +713,7 @@
 			path = ".build/checkouts/swift-package-manager.git--1360968477675319560/Sources/Basic";
 			sourceTree = SOURCE_ROOT;
 		};
-		OBJ_5 /*  */ = {
+		OBJ_5 = {
 			isa = PBXGroup;
 			children = (
 				OBJ_6 /* Package.swift */,
@@ -707,7 +724,6 @@
 				OBJ_130 /* GordiasChat */,
 				OBJ_131 /* README.md */,
 			);
-			name = "";
 			sourceTree = "<group>";
 		};
 		OBJ_64 /* Build */ = {
@@ -774,6 +790,7 @@
 			children = (
 				OBJ_9 /* AdapterArgument.swift */,
 				OBJ_10 /* main.swift */,
+				179F0F282273F3F8007DDE91 /* help.swift */,
 			);
 			name = Gordias;
 			path = Sources/Gordias;
@@ -1076,7 +1093,7 @@
 				English,
 				en,
 			);
-			mainGroup = OBJ_5 /*  */;
+			mainGroup = OBJ_5;
 			productRefGroup = OBJ_121 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -1138,6 +1155,7 @@
 				OBJ_169 /* SynchronizedQueue.swift in Sources */,
 				OBJ_170 /* TemporaryFile.swift in Sources */,
 				OBJ_171 /* TerminalController.swift in Sources */,
+				179F0F292273F3F8007DDE91 /* help.swift in Sources */,
 				OBJ_172 /* Thread.swift in Sources */,
 				OBJ_173 /* Tuple.swift in Sources */,
 				OBJ_174 /* misc.swift in Sources */,
@@ -1148,6 +1166,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
+				179F0F2C2273F5DF007DDE91 /* help.swift in Sources */,
 				OBJ_190 /* AdapterArgument.swift in Sources */,
 				OBJ_191 /* main.swift in Sources */,
 			);
@@ -1309,7 +1328,7 @@
 		OBJ_233 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Gordias::GordiasTests" /* GordiasTests */;
-			targetProxy = "Gordias::GordiasTests" /* GordiasTests */;
+			targetProxy = 179F0F2A2273F3F9007DDE91 /* PBXContainerItemProxy */;
 		};
 		OBJ_248 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1384,7 +1403,7 @@
 		OBJ_331 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = "Gordias::Gordias" /* Gordias */;
-			targetProxy = "Gordias::Gordias" /* Gordias */;
+			targetProxy = 179F0F2B2273F3F9007DDE91 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
