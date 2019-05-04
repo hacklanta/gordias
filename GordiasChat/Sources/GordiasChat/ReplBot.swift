@@ -5,6 +5,7 @@
 
 import Foundation
 
+/// ReplBot is a REPL-based implementation of the `ChatBot` protocol.
 public class ReplBot: ChatBot {
     public let name: String
 
@@ -14,7 +15,9 @@ public class ReplBot: ChatBot {
         }
     }
     
-    // Definitely room for optimization here, since removing is going to be a pain, but that's for the future. For small enough rulesets this should be trivial.
+    // Definitely room for optimization here, since removing is going to be a
+    // pain, but that's for the future. For small enough rulesets this should be
+    // trivial.
     private var rules: [(String?, ChatMessageProcessor)] = []
     
     public init(named _botName: String) {
