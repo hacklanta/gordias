@@ -4,20 +4,6 @@
 
 import Foundation
 
-public protocol ChatMatcher {
-    associatedtype MatchType
-
-    func matches(message: String) -> [MatchType]
-}
-
-public protocol ChatMessageProcessor {
-    func response(for _message: String) -> ChatResponse?
-}
-
-public protocol ChatResponse {
-    func message() -> String
-}
-
 /**
  * ChatBot specifies the protocol that providers of bot functionality
  * are expected to conform to in order to integrate with the rest of
@@ -54,7 +40,7 @@ public protocol ChatBot {
      * for processing messages as well for conformance.
      */
     func process(message: String)
-    
+
     // MARK: Message processor management
     /**
      * Registers a `ChatMessageProcessor` that will be checked against
@@ -79,4 +65,36 @@ public protocol ChatBot {
      * should include the processor with the given `id` or not.
      */
     func unlisten(id: String) -> Bool
+}
+
+/// ChatMessageProcessor is the base protocol for any component that wishes to
+/// decide whether it should provide a chat response for any given message
+/// received by the system.
+///
+/// ChatMessageProcessors have one method, `response(for:)`, which receives the
+/// chat message as a `String` and optionally returns a `ChatResponse` if the
+/// processor chooses to respond to the message in question.
+///
+/// ChatMessageProcessors also have one read-only property, a `help` string.
+///
+/// Conforming to this protocol qualifies a type to be added to a `ReplBot` as a
+/// listener using `listen(for:id:)`.
+public protocol ChatMessageProcessor {
+    func response(for _message: String) -> ChatResponse?
+}
+
+/// ChatMatcher is the base protocol for any component that decides whether a
+/// chat message is matched. It is typically used alongside a
+/// `ChatMessageProcessor`, whose associated matcher determines whether the
+/// processor should be consulted for a response.
+public protocol ChatMatcher {
+    associatedtype MatchType
+
+    func matches(message: String) -> [MatchType]
+}
+
+/// ChatResponse is the base protocol for responses in a chat. A ChatResponse
+/// simply needs to be able to represent itself as a `message()` `String`.
+public protocol ChatResponse {
+    func message() -> String
 }
