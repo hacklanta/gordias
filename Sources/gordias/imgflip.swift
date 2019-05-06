@@ -15,6 +15,56 @@ private struct MemeTemplate {
     let templateID: Int
 }
 
+private struct ImgflipFailure: Decodable {
+    let success: Bool
+    let errorMessage: String
+
+    enum CodingKeys: String, CodingKey {
+        case success
+        case errorMessage = "error_message"
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = try values.decode(Bool.self, forKey: .success)
+        guard !self.success else {
+            throw DecodingError.dataCorruptedError(forKey: .success, in: values, debugDescription: "Imgflip failure responses should have their success property set to false, but it was set to true: \(decoder).")
+        }
+
+        errorMessage = try values.decode(String.self, forKey: .errorMessage)
+    }
+}
+
+private struct ImgflipResponseData: Decodable {
+    let url: String
+    let pageUrl: String
+
+    enum CodingKeys: String, CodingKey {
+        case url
+        case pageUrl = "page_url"
+    }
+}
+
+private struct ImgflipSuccess: Decodable {
+    let success: Bool
+    let data: ImgflipResponseData
+
+    enum CodingKeys: String, CodingKey {
+        case success
+        case data
+    }
+
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        success = try values.decode(Bool.self, forKey: .success)
+        guard self.success else {
+            throw DecodingError.dataCorruptedError(forKey: .success, in: values, debugDescription: "Imgflip success responses should have their success property set to true, but it was set to false: \(decoder).")
+        }
+
+        data = try values.decode(ImgflipResponseData.self, forKey: .data)
+    }
+}
+
 private let memeTemplates = wrappedThrow(withDefault: []) {
     [
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(one does not simply) (.*)"),
@@ -85,7 +135,8 @@ private func imgflipURLRequest(forTemplateID templateID: Int, boxes: [String]) -
     return finalURL
 }
 
-private func urlForTemplate(templateID: Int, matches: [String]) {
+private func urlForTemplate(templateID: Int, matches: [String]) -> FutureChatResponse {
+    let chatResponse = FutureChatResponse()
     URLSession.shared
         .dataTask(with: imgflipURLRequest(forTemplateID: templateID, boxes: matches)) { (data, response, error) in
             guard error == nil else {
@@ -98,23 +149,27 @@ private func urlForTemplate(templateID: Int, matches: [String]) {
                 return
             }
 
-            print("-------\n", String(data: imageData, encoding: .utf8)!, "\n-------")
+            if let failure = try? JSONDecoder().decode(ImgflipFailure.self, from: imageData) {
+                chatResponse.resolved(response: "Imgflip returned an error: \(failure.errorMessage)")
+            } else if let success = try? JSONDecoder().decode(ImgflipSuccess.self, from: imageData) {
+                chatResponse.resolved(response: success.data.url)
+            } else {
+                // Log an unknown error with the data.
+                chatResponse.resolved(response: "Couldn't talk to imgflip for some reason :(")
+            }
         }.resume()
+
+    return chatResponse
 }
 
 func addImgflip(toBot bot: ChatBot) {
     memeTemplates.forEach { (template) in
-        bot.listen(for: template.pattern, responding: { (matches, message) in
-            print("Here I am! \(message)")
+        bot.listen(for: template.pattern, respondingLater: { (matches, message) in
             do {
-                try matches.forEach({ match in
-                    try urlForTemplate(templateID: template.templateID,
-                                       matches: match.mapRange(in: message) { String($0) })
-                })
-
-                return ""
+                return try urlForTemplate(templateID: template.templateID,
+                                          matches: matches[0].mapRange(in: message) { String($0) })
             } catch {
-                return "💩"
+                return nil
             }
         }, help: String(describing: template.pattern))
     }
