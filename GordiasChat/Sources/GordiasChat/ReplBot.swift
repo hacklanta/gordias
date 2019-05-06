@@ -40,7 +40,11 @@ public class ReplBot: ChatBot {
         }
     }
     
-    public func listen(for _processor: ChatMessageProcessor, id: String? = nil) {
+    public func listen(for _processor: SynchronousResponder, id: String? = nil) {
+        rules.append((id, _processor))
+    }
+
+    public func listen(for _processor: FutureResponder, id: String? = nil) {
         rules.append((id, _processor))
     }
     
@@ -52,12 +56,23 @@ public class ReplBot: ChatBot {
     }
     
     public func process(message: String) {
-        for response in responsesFor(message: message) {
-            print(response)
+        rules.forEach { _, processor in
+            switch processor {
+            case let synchronous as SynchronousResponder:
+                if let response = synchronous.response(for: message) {
+                    print(": " + response.message())
+                }
+            case let future as FutureResponder:
+                if let future = future.response(for: message) {
+                    future.whenReady(_handler: { response in
+                        guard let response = response else { return }
+
+                        print(": " + response.message())
+                    })
+                }
+            default:
+                break
+            }
         }
-    }
-    
-    func responsesFor(message: String) -> [ChatResponse] {
-        return rules.compactMap { $0.1.response(for: message) }
     }
 }

@@ -54,7 +54,20 @@ public protocol ChatBot {
      * succeed, but it is undefined if the current message's processing
      * should include the new processor or not.
      */
-    func listen(for: ChatMessageProcessor, id: String?)
+    func listen(for: SynchronousResponder, id: String?)
+    /**
+     * Registers a `FutureChatMessageProcessor` that will be checked against
+     * incoming messages. The processor should choose to provide a
+     * future-response for any given message or not based on internal logic.
+     *
+     * The optional `id` can be used to later remove the processor using
+     * the `unlisten(id:)` method.
+     *
+     * If called while a message is being processed, this method should
+     * succeed, but it is undefined if the current message's processing
+     * should include the new processor or not.
+     */
+    func listen(for: FutureResponder, id: String?)
     /**
      * Given an `id` that was previously passed to `listen(for:id:)`, removes
      * the listener added with that id so that it will no longer process
@@ -81,8 +94,14 @@ public protocol ChatBot {
 /// listener using `listen(for:id:)`.
 public protocol ChatMessageProcessor {
     var help: String { get }
+}
 
+public protocol SynchronousResponder where Self: ChatMessageProcessor {
     func response(for _message: String) -> ChatResponse?
+}
+
+public protocol FutureResponder where Self: ChatMessageProcessor {
+    func response(for _message: String) -> FutureChatResponse?
 }
 
 /// ChatMatcher is the base protocol for any component that decides whether a
@@ -99,4 +118,39 @@ public protocol ChatMatcher {
 /// simply needs to be able to represent itself as a `message()` `String`.
 public protocol ChatResponse {
     func message() -> String
+}
+
+/// FutureChatResponse is a class that encapsulates a future `ChatResponse`. You
+/// can essentially think of it as a `Promise<ChatResponse>`, with a single
+/// `whenReady` method that registers a callback to be called when the response
+/// is ready. If the response is already ready, the handler is immediately
+/// called.
+///
+/// - Warning: FutureChatResponse ain't thread-safe. It should be replaced by a
+///     proper Promise wrapper at some point.
+public class FutureChatResponse {
+    private var responseHandlers: [(ChatResponse?)->Void] = []
+    private var response: ChatResponse? = nil
+    private var responseResolved: Bool = false
+
+    public init() {}
+    public init(alreadyReady readyResponse: ChatResponse?) {
+        response = readyResponse
+        responseResolved = true
+    }
+
+    public func whenReady(_handler: @escaping (ChatResponse?)->Void) {
+        if responseResolved {
+            _handler(response)
+        } else {
+            responseHandlers.append(_handler)
+        }
+    }
+
+    public func resolved(response: ChatResponse?) {
+        responseResolved = true
+        self.response = response
+
+        responseHandlers.forEach { $0(response) }
+    }
 }
