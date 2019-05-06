@@ -67,7 +67,7 @@ help:: Lists all available message processors and their help information.
 help <filter>:: Lists all message processors matching <filter> and their help information.
 """
 
-private func imgflipURLRequest(forTemplateID templateID: Int, boxes: [String]) -> URLRequest {
+private func imgflipURLRequest(forTemplateID templateID: Int, boxes: [String]) -> URL {
     var component = URLComponents(url: imgflipBaseURL, resolvingAgainstBaseURL: false)!
 
     let boxItems = boxes.enumerated().map { URLQueryItem(name: "boxes[\($0.offset)][text]", value: $0.element) }
@@ -82,9 +82,7 @@ private func imgflipURLRequest(forTemplateID templateID: Int, boxes: [String]) -
         preconditionFailure("Malformed final imgflip URL: \(component)")
     }
 
-    let request = URLRequest(url: finalURL)
-
-    return request
+    return finalURL
 }
 
 private func urlForTemplate(templateID: Int, matches: [String]) {
