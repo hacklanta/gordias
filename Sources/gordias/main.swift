@@ -13,7 +13,7 @@ do {
     let adapter = parsed.get(adapterArgument) ?? AdapterArgument.repl
     let bot = adapter.bot(named: "Gordias")
 
-    try addHelp(forBot: bot)
+    try addHelp(toBot: bot)
     addImgflip(toBot: bot)
 
     bot.listen()

@@ -34,8 +34,8 @@ private func helpResponse(forBot _bot: ChatBot) -> ([NSTextCheckingResult],Strin
     }
 }
 
-func addHelp(forBot _bot: ChatBot) throws {
-    try _bot.listen(forPattern: helpPattern,
-                    responding: helpResponse(forBot: _bot),
+func addHelp(toBot bot: ChatBot) throws {
+    try bot.listen(forPattern: helpPattern,
+                    responding: helpResponse(forBot: bot),
                     help: help)
 }
