@@ -17,7 +17,7 @@ extension NSTextCheckingResult {
             preconditionFailure("Called forEachRange on non-regular expression NSTextCheckingResult: \(self)")
         }
 
-        for rangeIndex in 0..<self.numberOfRanges {
+        for rangeIndex in 1..<self.numberOfRanges {
             try body(self.range(at: rangeIndex))
         }
     }
@@ -52,7 +52,7 @@ extension NSTextCheckingResult {
         }
 
         var accumulator: [T] = []
-        for rangeIndex in 0..<self.numberOfRanges {
+        for rangeIndex in 1..<self.numberOfRanges {
             accumulator.append(try transform(self.range(at: rangeIndex)))
         }
 
