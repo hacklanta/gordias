@@ -32,8 +32,13 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
-		179F0F292273F3F8007DDE91 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179F0F282273F3F8007DDE91 /* help.swift */; };
-		179F0F2C2273F5DF007DDE91 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179F0F282273F3F8007DDE91 /* help.swift */; };
+		17DE597D227FC55A000121D1 /* AdapterArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AdapterArgument.swift */; };
+		17DE597E227FC55A000121D1 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
+		17DE597F227FC55A000121D1 /* ErrorUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE5971227E5077000121D1 /* ErrorUtils.swift */; };
+		17DE5980227FC55A000121D1 /* help.swift in Sources */ = {isa = PBXBuildFile; fileRef = 179F0F282273F3F8007DDE91 /* help.swift */; };
+		17DE5981227FC55A000121D1 /* imgflip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE596F227E5039000121D1 /* imgflip.swift */; };
+		17DE5982227FC55A000121D1 /* URL+StaticString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE596D227E31BC000121D1 /* URL+StaticString.swift */; };
+		17DE5983227FC55A000121D1 /* NSTextCheckingResult+BlockIterators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17DE5973227FA5D8000121D1 /* NSTextCheckingResult+BlockIterators.swift */; };
 		OBJ_137 /* Await.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_26 /* Await.swift */; };
 		OBJ_138 /* ByteString.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_27 /* ByteString.swift */; };
 		OBJ_139 /* CStringArray.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_28 /* CStringArray.swift */; };
@@ -75,8 +80,6 @@
 		OBJ_176 /* POSIX.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::POSIX::Product" /* POSIX.framework */; };
 		OBJ_177 /* SPMLibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::SPMLibc::Product" /* SPMLibc.framework */; };
 		OBJ_178 /* clibc.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::clibc::Product" /* clibc.framework */; };
-		OBJ_190 /* AdapterArgument.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_9 /* AdapterArgument.swift */; };
-		OBJ_191 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = OBJ_10 /* main.swift */; };
 		OBJ_193 /* GordiasChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "GordiasChat::GordiasChat::Product" /* GordiasChat.framework */; };
 		OBJ_194 /* Utility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::Utility::Product" /* Utility.framework */; };
 		OBJ_195 /* Basic.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = "SwiftPM::Basic::Product" /* Basic.framework */; };
@@ -320,8 +323,12 @@
 
 /* Begin PBXFileReference section */
 		179F0F282273F3F8007DDE91 /* help.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = help.swift; path = Sources/gordias/help.swift; sourceTree = SOURCE_ROOT; };
+		17DE596D227E31BC000121D1 /* URL+StaticString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "URL+StaticString.swift"; path = "Sources/gordias/URL+StaticString.swift"; sourceTree = SOURCE_ROOT; };
+		17DE596F227E5039000121D1 /* imgflip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = imgflip.swift; path = Sources/gordias/imgflip.swift; sourceTree = SOURCE_ROOT; };
+		17DE5971227E5077000121D1 /* ErrorUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ErrorUtils.swift; path = Sources/gordias/ErrorUtils.swift; sourceTree = SOURCE_ROOT; };
+		17DE5973227FA5D8000121D1 /* NSTextCheckingResult+BlockIterators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NSTextCheckingResult+BlockIterators.swift"; path = "Sources/gordias/NSTextCheckingResult+BlockIterators.swift"; sourceTree = SOURCE_ROOT; };
 		"Gordias::Gordias::Product" /* Gordias */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = Gordias; sourceTree = BUILT_PRODUCTS_DIR; };
-		"Gordias::GordiasTests::Product" /* GordiasTests.xctest */ = {isa = PBXFileReference; lastKnownFileType = file; path = GordiasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		"Gordias::GordiasTests::Product" /* GordiasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; path = GordiasTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		"GordiasChat::GordiasChat::Product" /* GordiasChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = GordiasChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		OBJ_10 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		OBJ_100 /* SimplePersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimplePersistence.swift; sourceTree = "<group>"; };
@@ -790,7 +797,11 @@
 			children = (
 				OBJ_9 /* AdapterArgument.swift */,
 				OBJ_10 /* main.swift */,
+				17DE5971227E5077000121D1 /* ErrorUtils.swift */,
 				179F0F282273F3F8007DDE91 /* help.swift */,
+				17DE596F227E5039000121D1 /* imgflip.swift */,
+				17DE596D227E31BC000121D1 /* URL+StaticString.swift */,
+				17DE5973227FA5D8000121D1 /* NSTextCheckingResult+BlockIterators.swift */,
 			);
 			name = Gordias;
 			path = Sources/Gordias;
@@ -1098,8 +1109,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				"SwiftPM::Basic" /* Basic */,
 				"Gordias::Gordias" /* Gordias */,
+				"SwiftPM::Basic" /* Basic */,
 				"GordiasChat::GordiasChat" /* GordiasChat */,
 				"GordiasChat::SwiftPMPackageDescription" /* GordiasChatPackageDescription */,
 				"Gordias::SwiftPMPackageDescription" /* GordiasPackageDescription */,
@@ -1155,7 +1166,6 @@
 				OBJ_169 /* SynchronizedQueue.swift in Sources */,
 				OBJ_170 /* TemporaryFile.swift in Sources */,
 				OBJ_171 /* TerminalController.swift in Sources */,
-				179F0F292273F3F8007DDE91 /* help.swift in Sources */,
 				OBJ_172 /* Thread.swift in Sources */,
 				OBJ_173 /* Tuple.swift in Sources */,
 				OBJ_174 /* misc.swift in Sources */,
@@ -1166,9 +1176,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 0;
 			files = (
-				179F0F2C2273F5DF007DDE91 /* help.swift in Sources */,
-				OBJ_190 /* AdapterArgument.swift in Sources */,
-				OBJ_191 /* main.swift in Sources */,
+				17DE5983227FC55A000121D1 /* NSTextCheckingResult+BlockIterators.swift in Sources */,
+				17DE597E227FC55A000121D1 /* main.swift in Sources */,
+				17DE597F227FC55A000121D1 /* ErrorUtils.swift in Sources */,
+				17DE5980227FC55A000121D1 /* help.swift in Sources */,
+				17DE5981227FC55A000121D1 /* imgflip.swift in Sources */,
+				17DE5982227FC55A000121D1 /* URL+StaticString.swift in Sources */,
+				17DE597D227FC55A000121D1 /* AdapterArgument.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1617,6 +1631,7 @@
 		OBJ_236 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1645,6 +1660,7 @@
 		OBJ_237 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CLANG_ENABLE_MODULES = YES;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
