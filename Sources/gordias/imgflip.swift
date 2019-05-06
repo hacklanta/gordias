@@ -110,13 +110,6 @@ private let memeTemplates = wrappedThrow(withDefault: []) {
     ]
 }
 
-private let imgflipPatterns = "^help *(?<filter>.*)?"
-private let imgflipHelp =
-"""
-help:: Lists all available message processors and their help information.
-help <filter>:: Lists all message processors matching <filter> and their help information.
-"""
-
 private func imgflipURLRequest(forTemplateID templateID: Int, boxes: [String]) -> URL {
     var component = URLComponents(url: imgflipBaseURL, resolvingAgainstBaseURL: false)!
 
