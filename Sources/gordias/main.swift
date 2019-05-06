@@ -14,6 +14,7 @@ do {
     let bot = adapter.bot(named: "Gordias")
 
     try addHelp(forBot: bot)
+    addImgflip(toBot: bot)
 
     bot.listen()
 } catch let ape as ArgumentParserError {
