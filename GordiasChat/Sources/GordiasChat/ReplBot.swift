@@ -4,10 +4,12 @@
 //
 
 import Foundation
+import GordiasBrain
 
 /// ReplBot is a REPL-based implementation of the `ChatBot` protocol.
 public class ReplBot: ChatBot {
     public let name: String
+    public var brain: Brain
 
     public var processors: [ChatMessageProcessor] {
         get {
@@ -20,8 +22,9 @@ public class ReplBot: ChatBot {
     // trivial.
     private var rules: [(String?, ChatMessageProcessor)] = []
     
-    public init(named _botName: String) {
+    public init(named _botName: String, brain: Brain = InMemoryBrain()) {
         self.name = _botName
+        self.brain = brain
     }
 
     public func listen() {

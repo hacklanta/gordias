@@ -3,6 +3,7 @@
 //
 
 import Foundation
+import GordiasBrain
 
 /**
  * ChatBot specifies the protocol that providers of bot functionality
@@ -26,6 +27,7 @@ import Foundation
  */
 public protocol ChatBot {
     var name: String { get }
+    var brain: Brain { get set }
     var processors: [ChatMessageProcessor] { get }
 
     /**
