@@ -176,15 +176,44 @@ private func urlForTemplate(templateID: Int, matches: [String]) -> FutureChatRes
     return chatResponse
 }
 
-func addImgflip(toBot bot: ChatBot) {
-    memeTemplates.forEach { (template) in
-        bot.listen(for: template.pattern, respondingLater: { (matches, message) in
-            do {
-                return try urlForTemplate(templateID: template.templateID,
-                                          matches: matches[0].mapRange(in: message) { String($0) })
-            } catch {
-                return nil
-            }
-        }, help: template.help)
-    }
+private func register(template: MemeTemplate, onBot bot: ChatBot) throws {
+    bot.listen(for: template.pattern, respondingLater: { (matches, message) in
+        do {
+            return try urlForTemplate(templateID: template.templateID,
+                                      matches: matches[0].mapRange(in: message) { String($0) })
+        } catch {
+            return nil
+        }
+    }, help: template.help)
+}
+
+func addImgflip(toBot bot: inout ChatBot) throws {
+    var knownTemplates = bot.brain["imgflipMemeTemplates"] as? [MemeTemplate] ?? memeTemplates
+
+    try knownTemplates.forEach { try register(template: $0, onBot: bot) }
+
+    try bot.listen(forPattern: "meme add (.*) with id ([0-9]+)", responding: { (matches, message) in
+        let memePattern =
+            matches[0]
+                .range(inString: message, at: 1)
+                .map { String($0) }
+                .flatMap { try? NSRegularExpression(pattern: $0) }
+        let memeTemplateID = matches[0].range(inString: message, at: 2).flatMap { Int($0) }
+
+        guard let pattern = memePattern, let templateID = memeTemplateID else {
+                return "Failed to extract pattern and id from \(message)."
+        }
+
+        let template = MemeTemplate(pattern: pattern,
+                                    help: String(describing: pattern),
+                                    templateID: templateID)
+
+        wrappedThrow {
+            try register(template: template, onBot: bot)
+            knownTemplates.append(template)
+            bot.brain["imgflipMemeTemplates"] = knownTemplates
+        }
+
+        return "Meme pattern \(pattern) registered for template https://imgur.com/gallery/\(templateID) ."
+    }, help: "meme add <regex> with id <imgflip template id>")
 }

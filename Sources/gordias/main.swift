@@ -11,10 +11,10 @@ let adapterArgument = parser.add(option: "--adapter", shortName: "-a", kind: Ada
 do {
     let parsed = try parser.parse(arguments)
     let adapter = parsed.get(adapterArgument) ?? AdapterArgument.repl
-    let bot = adapter.bot(named: "Gordias")
+    var bot = adapter.bot(named: "Gordias")
 
     try addHelp(toBot: bot)
-    addImgflip(toBot: bot)
+    try addImgflip(toBot: &bot)
 
     bot.listen()
 } catch let ape as ArgumentParserError {
