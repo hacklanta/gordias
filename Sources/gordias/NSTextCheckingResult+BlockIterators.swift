@@ -8,6 +8,14 @@
 import Foundation
 
 extension NSTextCheckingResult {
+    func range(inString string: String, at index: Int) -> Substring? {
+        guard self.resultType == .regularExpression else {
+            preconditionFailure("Called range(inString:at:) on non-regular expression NSTextCheckingResult: \(self)")
+        }
+
+        return Range(self.range(at: index), in: string).flatMap { string[$0] }
+    }
+
     /// Iterates over each indexed range in this `NSTextCheckingResult`, calling
     /// the passed `body` for each one. The result of `body` is discarded.
     ///
