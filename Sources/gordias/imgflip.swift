@@ -12,6 +12,7 @@ private let imgflipBaseURL = URL(staticString: "https://api.imgflip.com/caption_
 
 private struct MemeTemplate {
     let pattern: NSRegularExpression
+    let help: String
     let templateID: Int
 }
 
@@ -68,44 +69,64 @@ private struct ImgflipSuccess: Decodable {
 private let memeTemplates = wrappedThrow(withDefault: []) {
     [
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(one does not simply) (.*)"),
+                     help: "One does not simply <text>:: Lord of the Rings Boromir",
                      templateID: 61579),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(i don'?t always .*) (but when i do,? .*)"),
+                     help: "I don't always <text> but when i do <text>:: The Most Interesting man in the World",
                      templateID: 61532),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "aliens ()(.*)"),
+                     help: "aliens <text>:: Ancient Aliens History Channel Guy",
                      templateID: 101470),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "grumpy cat ()(.*)"),
+                     help: "grumpy cat <text>:: Grumpy Cat with text on the bottom",
                      templateID: 405658),
         MemeTemplate(pattern: try NSRegularExpression(pattern: #"(.*),? (\1 everywhere)"#),
+                     help: "<text>, <text> everywhere:: X, X Everywhere (Buzz and Woody from Toy Story)",
                      templateID: 347390),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(not sure if .*) (or .*)"),
+                     help: "Not sure if <text> or <text>:: Futurama Fry",
                      templateID: 61520),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(y u no) (.+)"),
+                     help: "Y U NO <text>:: Y U NO Guy",
                      templateID: 61527),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(brace yoursel[^\\s]+) (.*)"),
+                     help: "Brace yourselves <text>:: Brace Yourselves X is Coming (Imminent Ned, Game of Thrones)",
                      templateID: 61546),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (all the .*)"),
+                     help: "<text> all the <text>:: X all the Y",
                      templateID: 61533),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (that would be great|that'?d be great)"),
+                     help: "<text> that would be great:: Bill Lumbergh from Office Space",
                      templateID: 563423),
         MemeTemplate(pattern: try NSRegularExpression(pattern: #"(.*) (\w+\stoo damn .*)"#),
+                     help: "<text> too damn <text>:: The rent is too damn high",
                      templateID: 61580),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(yo dawg .*) (so .*)"),
+                     help: "Yo dawg <text> so <text>:: Yo Dawg Heard You (Xzibit)",
                      templateID: 101716),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (.* gonna have a bad time)"),
+                     help: "<text> you're gonna have a bad time:: Super Cool Ski Instructor from South Park",
                      templateID: 100951),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(am i the only one around here) (.*)"),
+                     help: "Am I the only one around here <text>:: The Big Lebowski",
                      templateID: 259680),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(what if i told you) (.*)"),
+                     help: "What if I told you <text>:: Matrix Morpheus",
                      templateID: 100947),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (ain'?t nobody got time for? that)"),
+                     help: "<text> ain't nobody got time for that",
                      templateID: 442575),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (i guarantee it)"),
+                     help: "<text> I guarantee it:: George Zimmer",
                      templateID: 10672255),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.*) (a+n+d+ it'?s gone)"),
+                     help: "<text> and it's gone:: South Park Banker Guy",
                      templateID: 766986),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(.* bats an eye) (.* loses their minds?)"),
+                     help: "<text> nobody bats an eye <text> everyone loses their minds:: Heath Ledger Joker",
                      templateID: 1790995),
         MemeTemplate(pattern: try NSRegularExpression(pattern: "(back in my day) (.*)"),
+                     help: "back in my day <text>:: Grumpy old man",
                      templateID: 718432)
     ]
 }
@@ -164,6 +185,6 @@ func addImgflip(toBot bot: ChatBot) {
             } catch {
                 return nil
             }
-        }, help: String(describing: template.pattern))
+        }, help: template.help)
     }
 }
