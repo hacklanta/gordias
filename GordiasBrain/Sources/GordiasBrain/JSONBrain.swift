@@ -87,8 +87,8 @@ public class JSONFileBrain: SavingBrain {
         return internalBrain.value(ofType: type, forKey: key)
     }
 
-    public func save() throws -> String {
+    public func save() throws {
         let encoded = try JSONEncoder().encode(internalBrain)
-        return String(data: encoded, encoding: .utf8) ?? "<no data>"
+        print(String(data: encoded, encoding: .utf8) ?? "<no data>")
     }
 }

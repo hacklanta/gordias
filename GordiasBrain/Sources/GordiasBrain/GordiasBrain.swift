@@ -7,5 +7,5 @@ public protocol Brain {
 }
 
 public protocol SavingBrain: Brain {
-    func save() throws -> String
+    func save() throws
 }
