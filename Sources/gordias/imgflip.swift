@@ -217,14 +217,15 @@ private extension ChatBot {
 }
 
 func addImgflip(toBot bot: inout ChatBot) throws {
-    let brainTemplates = bot.brain.value(ofType: BrainType.self,
-                                         forKey: "imgflipMemeTemplates")
-    var knownTemplates = brainTemplates ?? memeTemplates
+    var knownTemplates = bot.brain.value(ofType: BrainType.self,
+                                         forKey: "imgflipMemeTemplates") ?? memeTemplates
 
     // Listen for known templates.
     knownTemplates.forEach { bot.listenFor(memeTemplate: $0) }
 
-    // Listen for new templates.
+    // Listen for new templates, making local copies of these two so they can be
+    // referenced when we need to attach a new call below.
+    var bot = bot
     try bot.listen(forPattern: "meme add (.*) with id ([0-9]+)", responding: { (matches, message) in
         let memeRegexp =
             matches[0]
@@ -241,13 +242,11 @@ func addImgflip(toBot bot: inout ChatBot) throws {
                                     help: String(describing: regexp),
                                     templateID: templateID)
 
-        wrappedThrow {
-            bot.listenFor(memeTemplate: template)
-            knownTemplates.append(template)
-            bot.brain.set(value: knownTemplates,
-                          ofType: BrainType.self,
-                          forKey: "imgflipMemeTemplates")
-        }
+        bot.listenFor(memeTemplate: template)
+        knownTemplates.append(template)
+        bot.brain.set(value: knownTemplates,
+                      ofType: BrainType.self,
+                      forKey: "imgflipMemeTemplates")
 
         return "Meme pattern \(regexp) registered for template https://imgur.com/gallery/\(templateID) ."
     }, help: "meme add <regex> with id <imgflip template id>")
