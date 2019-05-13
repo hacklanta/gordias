@@ -179,8 +179,7 @@ private func urlForTemplate(templateID: Int, matches: [String]) -> FutureChatRes
 private func register(template: MemeTemplate, onBot bot: ChatBot) throws {
     bot.listen(for: template.pattern, respondingLater: { (matches, message) in
         do {
-            return try urlForTemplate(templateID: template.templateID,
-                                      matches: matches[0].mapRange(in: message) { String($0) })
+                                      matches: matches[0].ranges(inString: message).map { String($0) })
         } catch {
             return nil
         }
