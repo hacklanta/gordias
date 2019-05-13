@@ -7,14 +7,43 @@
 
 import Foundation
 import GordiasChat
+import GordiasBrain
 
 private let imgflipBaseURL = URL(staticString: "https://api.imgflip.com/caption_image")
 
-private struct MemeTemplate {
+private struct MemeTemplate: Codable {
     let regexp: NSRegularExpression
     let help: String
     let templateID: Int
+
+    enum CodingKeys: String, CodingKey {
+        case pattern
+        case help
+        case templateID
+    }
+
+    init(regexp: NSRegularExpression, help: String, templateID: Int) {
+        self.regexp = regexp
+        self.help = help
+        self.templateID = templateID
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.regexp = try NSRegularExpression(pattern: container.decode(String.self, forKey: .pattern))
+        self.help = try container.decode(String.self, forKey: .help)
+        self.templateID = try container.decode(Int.self, forKey: .templateID)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(regexp.pattern, forKey: .pattern)
+        try container.encode(help, forKey: .help)
+        try container.encode(templateID, forKey: .templateID)
+    }
 }
+
+fileprivate typealias BrainType = [MemeTemplate]
 
 private struct ImgflipFailure: Decodable {
     let success: Bool
@@ -188,7 +217,9 @@ private extension ChatBot {
 }
 
 func addImgflip(toBot bot: inout ChatBot) throws {
-    var knownTemplates = bot.brain["imgflipMemeTemplates"] as? [MemeTemplate] ?? memeTemplates
+    let brainTemplates = bot.brain.value(ofType: BrainType.self,
+                                         forKey: "imgflipMemeTemplates")
+    var knownTemplates = brainTemplates ?? memeTemplates
 
     // Listen for known templates.
     knownTemplates.forEach { bot.listenFor(memeTemplate: $0) }
@@ -213,7 +244,9 @@ func addImgflip(toBot bot: inout ChatBot) throws {
         wrappedThrow {
             bot.listenFor(memeTemplate: template)
             knownTemplates.append(template)
-            bot.brain["imgflipMemeTemplates"] = knownTemplates
+            bot.brain.set(value: knownTemplates,
+                          ofType: BrainType.self,
+                          forKey: "imgflipMemeTemplates")
         }
 
         return "Meme pattern \(regexp) registered for template https://imgur.com/gallery/\(templateID) ."
