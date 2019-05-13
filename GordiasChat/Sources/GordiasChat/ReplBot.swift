@@ -10,6 +10,7 @@ import GordiasBrain
 public class ReplBot: ChatBot {
     public let name: String
     public var brain: Brain
+    private let saveTimer: DispatchSourceTimer?
 
     public var processors: [ChatMessageProcessor] {
         get {
@@ -25,6 +26,24 @@ public class ReplBot: ChatBot {
     public init(named _botName: String, brain: Brain = InMemoryBrain()) {
         self.name = _botName
         self.brain = brain
+
+        if let savingBrain = self.brain as? SavingBrain {
+            // FIXME Cleanup of the timer on deinit probably isn't a bad idea.
+            let saveTimer = DispatchSource.makeTimerSource()
+            saveTimer.schedule(deadline: .now(), repeating: .seconds(1))
+            saveTimer.setEventHandler {
+                do {
+                    try savingBrain.save()
+                } catch let e {
+                    // TODO Exponential backoff in timer reschedule?
+                    print("Error saving brain", e)
+                }
+            }
+            self.saveTimer = saveTimer
+            saveTimer.activate()
+        } else {
+            self.saveTimer = nil
+        }
     }
 
     public func listen() {
