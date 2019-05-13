@@ -176,21 +176,24 @@ private func urlForTemplate(templateID: Int, matches: [String]) -> FutureChatRes
     return chatResponse
 }
 
-private func register(template: MemeTemplate, onBot bot: ChatBot) throws {
-    bot.listen(for: template.pattern, respondingLater: { (matches, message) in
-        do {
-                                      matches: matches[0].ranges(inString: message).map { String($0) })
-        } catch {
-            return nil
-        }
-    }, help: template.help)
+private extension ChatBot {
+    func listenFor(memeTemplate: MemeTemplate) {
+        self.listen(for: memeTemplate.regexp, respondingLater: { (matches, message) in
+            let allMatches = matches[0].ranges(inString: message).map { String($0) }
+
+            return urlForTemplate(templateID: memeTemplate.templateID,
+                                  matches: allMatches)
+        }, help: memeTemplate.help)
+    }
 }
 
 func addImgflip(toBot bot: inout ChatBot) throws {
     var knownTemplates = bot.brain["imgflipMemeTemplates"] as? [MemeTemplate] ?? memeTemplates
 
-    try knownTemplates.forEach { try register(template: $0, onBot: bot) }
+    // Listen for known templates.
+    knownTemplates.forEach { bot.listenFor(memeTemplate: $0) }
 
+    // Listen for new templates.
     try bot.listen(forPattern: "meme add (.*) with id ([0-9]+)", responding: { (matches, message) in
         let memePattern =
             matches[0]
@@ -208,7 +211,7 @@ func addImgflip(toBot bot: inout ChatBot) throws {
                                     templateID: templateID)
 
         wrappedThrow {
-            try register(template: template, onBot: bot)
+            bot.listenFor(memeTemplate: template)
             knownTemplates.append(template)
             bot.brain["imgflipMemeTemplates"] = knownTemplates
         }
